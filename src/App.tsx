@@ -66,6 +66,30 @@ const COLORS = ['#4A90E2', '#FF9500', '#10b981', '#ef4444', '#8b5cf6', '#ec4899'
 
 const WHEEL_OPTIONS = ['Đỏ', 'Xanh dương', 'Xanh lá', 'Vàng', 'Cam', 'Tím'];
 
+// Character-themed wheel colors
+const WHEEL_COLORS: Record<string, string[]> = {
+  robot: ['#0d47a1', '#1565c0', '#1976d2', '#1e88e5', '#2196f3', '#42a5f5'],
+  mai: ['#880e4f', '#ad1457', '#c2185b', '#d81b60', '#e91e63', '#ec407a'],
+  viet: ['#bf360c', '#d84315', '#e64a19', '#f4511e', '#ff5722', '#ff6e40'],
+};
+
+// Character-themed chart colors
+const CHART_COLORS: Record<string, string[]> = {
+  robot: ['#42a5f5', '#4fc3f7', '#00bcd4', '#26c6da', '#80deea', '#b2ebf2'],
+  mai: ['#ec407a', '#f48fb1', '#ce93d8', '#ba68c8', '#f06292', '#e91e63'],
+  viet: ['#ff9800', '#ffc107', '#ff5722', '#ff7043', '#ffb74d', '#ffe082'],
+};
+
+// Dice dots layout helper
+const DICE_DOTS: Record<number, number[][]> = {
+  1: [[1, 1]],
+  2: [[0, 0], [2, 2]],
+  3: [[0, 0], [1, 1], [2, 2]],
+  4: [[0, 0], [0, 2], [2, 0], [2, 2]],
+  5: [[0, 0], [0, 2], [1, 1], [2, 0], [2, 2]],
+  6: [[0, 0], [0, 2], [1, 0], [1, 2], [2, 0], [2, 2]],
+};
+
 // --- Components ---
 
 export default function App() {
@@ -256,15 +280,20 @@ Học cùng ${CHARACTERS[currentCharacter].name}`;
           </div>
 
           {/* Simulation Area */}
-          <div className="glass-card rounded-3xl p-8 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden">
+          <div className={cn(
+            "glass-card rounded-3xl p-8 flex flex-col items-center justify-center min-h-[380px] relative overflow-hidden transition-all duration-500",
+            `sim-area-${currentCharacter}`
+          )}>
             <div className="absolute top-4 left-4 flex gap-2">
               {Object.entries(CHARACTERS).map(([key, char]) => (
                 <button
                   key={key}
                   onClick={() => setCurrentCharacter(key as any)}
                   className={cn(
-                    "w-10 h-10 rounded-full flex items-center justify-center text-xl transition-all border-2",
-                    currentCharacter === key ? "border-primary scale-110 shadow-md" : "border-transparent opacity-50 grayscale"
+                    "w-12 h-12 rounded-2xl flex items-center justify-center text-xl transition-all border-2 backdrop-blur-sm",
+                    currentCharacter === key 
+                      ? "border-primary scale-110 shadow-lg bg-white/80" 
+                      : "border-transparent opacity-50 grayscale bg-white/30 hover:opacity-70 hover:grayscale-0"
                   )}
                   title={char.name}
                 >
@@ -273,75 +302,227 @@ Học cùng ${CHARACTERS[currentCharacter].name}`;
               ))}
             </div>
 
+            {/* Character name indicator */}
+            <div className="absolute top-4 right-4">
+              <div className={cn(
+                "px-3 py-1.5 rounded-full text-xs font-bold text-white shadow-md",
+                CHARACTERS[currentCharacter].color
+              )}>
+                {CHARACTERS[currentCharacter].avatar} {CHARACTERS[currentCharacter].name}
+              </div>
+            </div>
+
             <AnimatePresence mode="wait">
               <motion.div
-                key={activeTab + isSimulating}
-                initial={{ scale: 0.8, opacity: 0, rotate: -10 }}
+                key={activeTab + currentCharacter}
+                initial={{ scale: 0.5, opacity: 0, rotate: -20 }}
                 animate={{ scale: 1, opacity: 1, rotate: 0 }}
-                exit={{ scale: 0.8, opacity: 0, rotate: 10 }}
-                className="relative"
+                exit={{ scale: 0.5, opacity: 0, rotate: 20 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                className="relative flex flex-col items-center"
               >
+                {/* === COIN === */}
                 {activeTab === 'coin' && (
-                  <motion.div 
-                    animate={isSimulating ? { rotateY: 720, y: [0, -100, 0] } : {}}
+                  <motion.div
+                    animate={isSimulating ? { 
+                      rotateY: [0, 360, 720], 
+                      y: [0, -120, 0],
+                      scale: [1, 1.1, 1]
+                    } : {}}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
-                    className="w-32 h-32 rounded-full bg-yellow-400 border-8 border-yellow-500 flex items-center justify-center shadow-2xl"
+                    className={`coin-${currentCharacter}`}
+                    style={{ perspective: '800px' }}
                   >
-                    <span className="text-4xl font-black text-yellow-700">
-                      {results.length > 0 && !isSimulating ? (results[0].outcome.includes('H') ? 'H' : 'T') : '$'}
+                    <span className="coin-symbol">
+                      {results.length > 0 && results[0].type === 'coin' && !isSimulating 
+                        ? (results[0].outcome.includes('H') ? 'H' : 'T') 
+                        : currentCharacter === 'robot' ? '⚙' : currentCharacter === 'mai' ? '✿' : '★'}
                     </span>
                   </motion.div>
                 )}
 
-                {activeTab === 'dice' && (
-                  <motion.div 
-                    animate={isSimulating ? { rotate: 360, x: [0, 20, -20, 0], y: [0, -50, 0] } : {}}
-                    transition={{ duration: 0.8 }}
-                    className="w-24 h-24 bg-white border-4 border-slate-200 rounded-2xl flex items-center justify-center shadow-2xl"
-                  >
-                    <div className="grid grid-cols-3 gap-2 p-4">
-                      {/* Simple dice dots representation */}
-                      {results.length > 0 && !isSimulating ? (
-                        <span className="text-5xl font-bold text-slate-800">
-                          {results[0].outcome.replace('Mặt ', '')}
-                        </span>
+                {/* === DICE === */}
+                {activeTab === 'dice' && (() => {
+                  const diceValue = results.length > 0 && results[0].type === 'dice' && !isSimulating
+                    ? parseInt(results[0].outcome.replace('Mặt ', ''))
+                    : 0;
+                  
+                  return (
+                    <motion.div
+                      animate={isSimulating ? { 
+                        rotate: [0, 90, 180, 270, 360], 
+                        x: [0, 30, -30, 15, 0], 
+                        y: [0, -60, -30, -50, 0],
+                        scale: [1, 1.1, 0.9, 1.05, 1]
+                      } : {}}
+                      transition={{ duration: 0.8, ease: "easeInOut" }}
+                      className={`dice-${currentCharacter}`}
+                    >
+                      {diceValue > 0 ? (
+                        <div style={{
+                          display: 'grid',
+                          gridTemplateColumns: 'repeat(3, 1fr)',
+                          gridTemplateRows: 'repeat(3, 1fr)',
+                          width: '100%',
+                          height: '100%',
+                          padding: '16px',
+                          position: 'relative',
+                          zIndex: 1,
+                        }}>
+                          {[0, 1, 2].map(row => 
+                            [0, 1, 2].map(col => {
+                              const hasDot = DICE_DOTS[diceValue]?.some(
+                                ([r, c]) => r === row && c === col
+                              );
+                              return (
+                                <div 
+                                  key={`${row}-${col}`} 
+                                  style={{
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                  }}
+                                >
+                                  {hasDot && (
+                                    <motion.div 
+                                      initial={{ scale: 0 }}
+                                      animate={{ scale: 1 }}
+                                      transition={{ delay: 0.1 * (row * 3 + col), type: 'spring' }}
+                                      className="dice-dot" 
+                                    />
+                                  )}
+                                </div>
+                              );
+                            })
+                          )}
+                        </div>
                       ) : (
-                        <div className="w-4 h-4 rounded-full bg-slate-800" />
+                        <div style={{ position: 'relative', zIndex: 1 }}>
+                          <span className="dice-number">
+                            {currentCharacter === 'robot' ? '?' : currentCharacter === 'mai' ? '♡' : '🎲'}
+                          </span>
+                        </div>
                       )}
+                    </motion.div>
+                  );
+                })()}
+
+                {/* === WHEEL === */}
+                {activeTab === 'wheel' && (
+                  <motion.div
+                    animate={isSimulating ? { rotate: [0, 1440 + Math.random() * 360] } : {}}
+                    transition={{ duration: 2, ease: [0.15, 0.85, 0.35, 1] }}
+                    className={`wheel-${currentCharacter}`}
+                  >
+                    <svg viewBox="0 0 200 200" width="100%" height="100%" style={{ position: 'absolute', inset: 0 }}>
+                      {WHEEL_OPTIONS.map((opt, i) => {
+                        const angle = (i * 360) / WHEEL_OPTIONS.length;
+                        const endAngle = ((i + 1) * 360) / WHEEL_OPTIONS.length;
+                        const startRad = (angle - 90) * (Math.PI / 180);
+                        const endRad = (endAngle - 90) * (Math.PI / 180);
+                        const x1 = 100 + 100 * Math.cos(startRad);
+                        const y1 = 100 + 100 * Math.sin(startRad);
+                        const x2 = 100 + 100 * Math.cos(endRad);
+                        const y2 = 100 + 100 * Math.sin(endRad);
+                        const largeArc = endAngle - angle > 180 ? 1 : 0;
+
+                        // Label position
+                        const midRad = ((angle + endAngle) / 2 - 90) * (Math.PI / 180);
+                        const labelX = 100 + 62 * Math.cos(midRad);
+                        const labelY = 100 + 62 * Math.sin(midRad);
+                        const labelRotation = (angle + endAngle) / 2;
+
+                        const colors = WHEEL_COLORS[currentCharacter] || COLORS;
+
+                        return (
+                          <g key={opt}>
+                            <path
+                              d={`M 100 100 L ${x1} ${y1} A 100 100 0 ${largeArc} 1 ${x2} ${y2} Z`}
+                              fill={colors[i % colors.length]}
+                              stroke="rgba(255,255,255,0.3)"
+                              strokeWidth="1"
+                            />
+                            <text
+                              x={labelX}
+                              y={labelY}
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              fill="white"
+                              fontSize="11"
+                              fontWeight="bold"
+                              transform={`rotate(${labelRotation}, ${labelX}, ${labelY})`}
+                              style={{ textShadow: '0 1px 3px rgba(0,0,0,0.5)' }}
+                            >
+                              {opt}
+                            </text>
+                          </g>
+                        );
+                      })}
+                    </svg>
+                    <div className="wheel-center">
+                      {currentCharacter === 'mai' && <span>♡</span>}
                     </div>
+                    <div className="wheel-pointer" />
                   </motion.div>
                 )}
 
-                {activeTab === 'wheel' && (
-                  <motion.div 
-                    animate={isSimulating ? { rotate: 1080 } : {}}
-                    transition={{ duration: 1.5, ease: "circOut" }}
-                    className="w-48 h-48 rounded-full border-8 border-slate-800 relative shadow-2xl overflow-hidden"
+                {/* Result badge */}
+                {results.length > 0 && results[0].type === activeTab && !isSimulating && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`result-badge result-badge-${currentCharacter} mt-6`}
                   >
-                    {WHEEL_OPTIONS.map((opt, i) => (
-                      <div 
-                        key={opt}
-                        className="absolute top-0 left-0 w-full h-full"
-                        style={{ 
-                          backgroundColor: COLORS[i % COLORS.length],
-                          clipPath: 'polygon(50% 50%, 50% 0%, 100% 0%, 100% 50%)',
-                          transform: `rotate(${i * (360 / WHEEL_OPTIONS.length)}deg)`
-                        }}
-                      />
-                    ))}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full border-4 border-slate-800 z-10" />
-                    {/* Pointer */}
-                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[10px] border-l-transparent border-r-[10px] border-r-transparent border-t-[20px] border-t-slate-800 z-20" />
+                    <span>🎯</span>
+                    <span>{results[0].outcome}</span>
                   </motion.div>
                 )}
               </motion.div>
+            </AnimatePresence>
+
+            {/* Sparkle particles on simulation */}
+            <AnimatePresence>
+              {isSimulating && (
+                <>
+                  {[...Array(8)].map((_, i) => (
+                    <motion.div
+                      key={`sparkle-${i}`}
+                      initial={{ opacity: 0, scale: 0, x: 0, y: 0 }}
+                      animate={{ 
+                        opacity: [0, 1, 0], 
+                        scale: [0, 1.5, 0],
+                        x: (Math.random() - 0.5) * 200,
+                        y: (Math.random() - 0.5) * 200,
+                      }}
+                      transition={{ duration: 0.8, delay: i * 0.1 }}
+                      className="absolute"
+                      style={{
+                        top: '50%',
+                        left: '50%',
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        background: currentCharacter === 'robot' ? '#4fc3f7' 
+                          : currentCharacter === 'mai' ? '#f48fb1' : '#ffc107',
+                        boxShadow: `0 0 10px ${currentCharacter === 'robot' ? 'rgba(79,195,247,0.8)' 
+                          : currentCharacter === 'mai' ? 'rgba(244,143,177,0.8)' : 'rgba(255,193,7,0.8)'}`,
+                      }}
+                    />
+                  ))}
+                </>
+              )}
             </AnimatePresence>
 
             <div className="mt-12 flex flex-wrap justify-center gap-4">
               <button
                 disabled={isSimulating}
                 onClick={() => handleSimulate(1)}
-                className="px-8 py-3 rounded-2xl gradient-bg text-white font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2 disabled:opacity-50"
+                className={cn(
+                  "px-8 py-3 rounded-2xl text-white font-bold shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all flex items-center gap-2 disabled:opacity-50",
+                  currentCharacter === 'robot' ? 'bg-gradient-to-r from-blue-600 to-cyan-500' :
+                  currentCharacter === 'mai' ? 'bg-gradient-to-r from-pink-500 to-rose-400' :
+                  'bg-gradient-to-r from-orange-500 to-amber-400'
+                )}
               >
                 <Play size={20} fill="currentColor" />
                 Thử ngay
@@ -399,7 +580,7 @@ Học cùng ${CHARACTERS[currentCharacter].name}`;
                         animationDuration={500}
                       >
                         {stats.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                          <Cell key={`cell-${index}`} fill={(CHART_COLORS[currentCharacter] || COLORS)[index % (CHART_COLORS[currentCharacter] || COLORS).length]} />
                         ))}
                       </Pie>
                       <Tooltip 
@@ -445,7 +626,7 @@ Học cùng ${CHARACTERS[currentCharacter].name}`;
                     {stats.map((row, idx) => (
                       <tr key={row.name} className="hover:bg-slate-50/50 transition-colors">
                         <td className="px-4 py-3 font-bold flex items-center gap-2">
-                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }} />
+                          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: (CHART_COLORS[currentCharacter] || COLORS)[idx % (CHART_COLORS[currentCharacter] || COLORS).length] }} />
                           {row.name}
                         </td>
                         <td className="px-4 py-3 font-medium">{row.value}</td>
