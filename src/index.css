@@ -28,3 +28,615 @@
 .gradient-bg {
   @apply bg-linear-to-r from-[#4A90E2] to-[#FF9500];
 }
+
+/* =====================================
+   CHARACTER-THEMED SIMULATION STYLES
+   ===================================== */
+
+/* --- COIN STYLES --- */
+
+/* Robot Coin: Futuristic holographic metal */
+.coin-robot {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #1e3a5f, #2d6cb4, #4fc3f7, #2d6cb4, #1e3a5f);
+  background-size: 200% 200%;
+  border: 6px solid #0d2b4e;
+  box-shadow:
+    0 0 30px rgba(79, 195, 247, 0.5),
+    0 0 60px rgba(79, 195, 247, 0.2),
+    inset 0 0 30px rgba(79, 195, 247, 0.3),
+    0 10px 40px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: robotGlow 3s ease-in-out infinite;
+}
+
+.coin-robot::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 2px solid rgba(79, 195, 247, 0.4);
+  background: transparent;
+}
+
+.coin-robot::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border-radius: 50%;
+  border: 1px dashed rgba(79, 195, 247, 0.3);
+}
+
+.coin-robot .coin-symbol {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #e0f7fa;
+  text-shadow: 0 0 20px rgba(79, 195, 247, 0.8), 0 0 40px rgba(79, 195, 247, 0.4);
+  font-family: 'Courier New', monospace;
+  z-index: 1;
+}
+
+@keyframes robotGlow {
+  0%, 100% { background-position: 0% 50%; box-shadow: 0 0 30px rgba(79, 195, 247, 0.5), 0 0 60px rgba(79, 195, 247, 0.2), inset 0 0 30px rgba(79, 195, 247, 0.3), 0 10px 40px rgba(0,0,0,0.3); }
+  50% { background-position: 100% 50%; box-shadow: 0 0 50px rgba(79, 195, 247, 0.7), 0 0 80px rgba(79, 195, 247, 0.3), inset 0 0 40px rgba(79, 195, 247, 0.4), 0 10px 40px rgba(0,0,0,0.3); }
+}
+
+/* Mai Coin: Cute pastel pink with flowers */
+.coin-mai {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0, #f48fb1, #f8bbd0, #fce4ec);
+  background-size: 200% 200%;
+  border: 6px solid #ec407a;
+  box-shadow:
+    0 0 20px rgba(236, 64, 122, 0.3),
+    0 0 40px rgba(244, 143, 177, 0.2),
+    inset 0 0 20px rgba(255, 255, 255, 0.5),
+    0 10px 40px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: maiSparkle 2s ease-in-out infinite;
+}
+
+.coin-mai::before {
+  content: '✿';
+  position: absolute;
+  top: 8px;
+  right: 12px;
+  font-size: 14px;
+  opacity: 0.6;
+  animation: floatPetal 2s ease-in-out infinite;
+}
+
+.coin-mai::after {
+  content: '❀';
+  position: absolute;
+  bottom: 10px;
+  left: 14px;
+  font-size: 12px;
+  opacity: 0.5;
+  animation: floatPetal 2s ease-in-out infinite reverse;
+}
+
+.coin-mai .coin-symbol {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #ad1457;
+  text-shadow: 0 2px 4px rgba(173, 20, 87, 0.3);
+  z-index: 1;
+}
+
+@keyframes maiSparkle {
+  0%, 100% { background-position: 0% 50%; transform: scale(1); }
+  50% { background-position: 100% 50%; transform: scale(1.02); }
+}
+
+@keyframes floatPetal {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-5px) rotate(15deg); }
+}
+
+/* Việt Coin: Energetic orange/gold with fire effects */
+.coin-viet {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6f00, #ff9800, #ffc107, #ff9800, #ff6f00);
+  background-size: 200% 200%;
+  border: 6px solid #e65100;
+  box-shadow:
+    0 0 25px rgba(255, 152, 0, 0.5),
+    0 0 50px rgba(255, 87, 34, 0.3),
+    inset 0 0 20px rgba(255, 193, 7, 0.4),
+    0 10px 40px rgba(0,0,0,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  animation: vietPulse 1.5s ease-in-out infinite;
+}
+
+.coin-viet::before {
+  content: '';
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  border: 3px solid rgba(255, 193, 7, 0.6);
+}
+
+.coin-viet::after {
+  content: '⚡';
+  position: absolute;
+  top: 6px;
+  font-size: 16px;
+  animation: zap 1s ease-in-out infinite;
+}
+
+.coin-viet .coin-symbol {
+  font-size: 3rem;
+  font-weight: 900;
+  color: #fff3e0;
+  text-shadow: 0 0 15px rgba(255, 87, 34, 0.6), 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 1;
+}
+
+@keyframes vietPulse {
+  0%, 100% { background-position: 0% 50%; box-shadow: 0 0 25px rgba(255, 152, 0, 0.5), 0 0 50px rgba(255, 87, 34, 0.3), inset 0 0 20px rgba(255, 193, 7, 0.4), 0 10px 40px rgba(0,0,0,0.2); }
+  50% { background-position: 100% 50%; box-shadow: 0 0 40px rgba(255, 152, 0, 0.7), 0 0 70px rgba(255, 87, 34, 0.4), inset 0 0 30px rgba(255, 193, 7, 0.5), 0 10px 40px rgba(0,0,0,0.2); }
+}
+
+@keyframes zap {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.3); }
+}
+
+/* --- DICE STYLES --- */
+
+/* Common dice face with dots */
+.dice-face {
+  display: grid;
+  padding: 12px;
+  width: 100%;
+  height: 100%;
+}
+
+.dice-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+}
+
+/* Robot Dice: Dark tech cube */
+.dice-robot {
+  width: 120px;
+  height: 120px;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #0a1628, #1a2a4a, #0d1f3c);
+  border: 3px solid #2196f3;
+  box-shadow:
+    0 0 20px rgba(33, 150, 243, 0.4),
+    0 0 40px rgba(33, 150, 243, 0.15),
+    inset 0 2px 10px rgba(33, 150, 243, 0.2),
+    0 15px 30px rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.dice-robot::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: conic-gradient(
+    from 0deg,
+    transparent,
+    rgba(33, 150, 243, 0.1),
+    transparent,
+    rgba(33, 150, 243, 0.05),
+    transparent
+  );
+  animation: rotateScan 4s linear infinite;
+}
+
+@keyframes rotateScan {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dice-robot .dice-dot {
+  background: #4fc3f7;
+  box-shadow: 0 0 8px rgba(79, 195, 247, 0.8), 0 0 16px rgba(79, 195, 247, 0.4);
+}
+
+.dice-robot .dice-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #4fc3f7;
+  text-shadow: 0 0 20px rgba(79, 195, 247, 0.8);
+  font-family: 'Courier New', monospace;
+  z-index: 1;
+}
+
+/* Mai Dice: Cute pastel rounded */
+.dice-mai {
+  width: 120px;
+  height: 120px;
+  border-radius: 24px;
+  background: linear-gradient(145deg, #fff0f3, #ffe0e8, #ffd6e0);
+  border: 4px solid #f48fb1;
+  box-shadow:
+    0 6px 20px rgba(244, 143, 177, 0.3),
+    inset 0 2px 10px rgba(255, 255, 255, 0.6),
+    0 15px 30px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.dice-mai::before {
+  content: '♡';
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  font-size: 12px;
+  color: #ec407a;
+  opacity: 0.6;
+}
+
+.dice-mai .dice-dot {
+  background: #ec407a;
+  box-shadow: 0 2px 4px rgba(236, 64, 122, 0.3);
+}
+
+.dice-mai .dice-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #c2185b;
+  z-index: 1;
+}
+
+/* Việt Dice: Bold sporty */
+.dice-viet {
+  width: 120px;
+  height: 120px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, #fff8e1, #ffe0b2, #ffcc80);
+  border: 4px solid #ff9800;
+  box-shadow:
+    0 0 15px rgba(255, 152, 0, 0.3),
+    0 6px 20px rgba(255, 87, 34, 0.2),
+    inset 0 2px 10px rgba(255, 255, 255, 0.5),
+    0 15px 30px rgba(0,0,0,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.dice-viet::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #ff5722, #ff9800, #ffc107, #ff9800, #ff5722);
+  background-size: 200% 100%;
+  animation: energyWave 1.5s linear infinite;
+}
+
+@keyframes energyWave {
+  from { background-position: 0% 50%; }
+  to { background-position: 200% 50%; }
+}
+
+.dice-viet .dice-dot {
+  background: #e65100;
+  box-shadow: 0 2px 4px rgba(230, 81, 0, 0.3);
+}
+
+.dice-viet .dice-number {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: #bf360c;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+/* --- WHEEL STYLES --- */
+
+/* Robot Wheel */
+.wheel-robot {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 6px solid #1565c0;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 30px rgba(33, 150, 243, 0.5),
+    0 0 60px rgba(33, 150, 243, 0.2),
+    inset 0 0 20px rgba(33, 150, 243, 0.2),
+    0 10px 40px rgba(0,0,0,0.3);
+}
+
+.wheel-robot .wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0d47a1, #2196f3);
+  border: 3px solid #4fc3f7;
+  z-index: 10;
+  box-shadow: 0 0 15px rgba(79, 195, 247, 0.6);
+}
+
+.wheel-robot .wheel-pointer {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 24px solid #4fc3f7;
+  filter: drop-shadow(0 0 8px rgba(79, 195, 247, 0.6));
+}
+
+/* Mai Wheel */
+.wheel-mai {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 6px solid #ec407a;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 20px rgba(236, 64, 122, 0.3),
+    0 0 40px rgba(244, 143, 177, 0.15),
+    inset 0 0 15px rgba(255, 255, 255, 0.3),
+    0 10px 40px rgba(0,0,0,0.15);
+}
+
+.wheel-mai .wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+  border: 3px solid #ec407a;
+  z-index: 10;
+  box-shadow: 0 4px 10px rgba(236, 64, 122, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.wheel-mai .wheel-pointer {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 0;
+  height: 0;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-top: 24px solid #ec407a;
+  filter: drop-shadow(0 2px 4px rgba(236, 64, 122, 0.4));
+}
+
+/* Viet Wheel */
+.wheel-viet {
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  border: 6px solid #e65100;
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 25px rgba(255, 152, 0, 0.4),
+    0 0 50px rgba(255, 87, 34, 0.2),
+    inset 0 0 15px rgba(255, 193, 7, 0.3),
+    0 10px 40px rgba(0,0,0,0.2);
+}
+
+.wheel-viet .wheel-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ff6f00, #ffc107);
+  border: 3px solid #ff5722;
+  z-index: 10;
+  box-shadow: 0 0 15px rgba(255, 87, 34, 0.5);
+}
+
+.wheel-viet .wheel-pointer {
+  position: absolute;
+  top: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  width: 0;
+  height: 0;
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-top: 26px solid #ff5722;
+  filter: drop-shadow(0 0 6px rgba(255, 87, 34, 0.5));
+}
+
+/* Simulation area backgrounds */
+.sim-area-robot {
+  background: linear-gradient(180deg, rgba(13, 31, 60, 0.05) 0%, rgba(33, 150, 243, 0.05) 100%);
+}
+
+.sim-area-mai {
+  background: linear-gradient(180deg, rgba(252, 228, 236, 0.3) 0%, rgba(248, 187, 208, 0.1) 100%);
+}
+
+.sim-area-viet {
+  background: linear-gradient(180deg, rgba(255, 243, 224, 0.3) 0%, rgba(255, 224, 178, 0.1) 100%);
+}
+
+/* Particle effects for simulation */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0) translate(0, 0); }
+  50% { opacity: 1; transform: scale(1) translate(var(--tx, 10px), var(--ty, -20px)); }
+}
+
+.sparkle-particle {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkle 1s ease-out forwards;
+}
+
+/* Dice dots grid layouts */
+.dots-1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dots-2 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+}
+
+.dots-2 .dice-dot:first-child {
+  align-self: flex-start;
+}
+
+.dots-2 .dice-dot:last-child {
+  align-self: flex-end;
+}
+
+.dots-3 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.dots-3 .dice-dot:first-child {
+  align-self: flex-start;
+}
+
+.dots-3 .dice-dot:nth-child(2) {
+  align-self: center;
+}
+
+.dots-3 .dice-dot:last-child {
+  align-self: flex-end;
+}
+
+.dots-4 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  padding: 20px;
+  place-items: center;
+}
+
+.dots-5 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 18px;
+  place-items: center;
+}
+
+.dots-5 .dice-dot:nth-child(5) {
+  grid-column: 1 / -1;
+}
+
+.dots-6 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 16px;
+  place-items: center;
+}
+
+/* Wheel segment labels */
+.wheel-label {
+  position: absolute;
+  font-size: 10px;
+  font-weight: 700;
+  color: white;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+/* Result display badges */
+.result-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 14px;
+  margin-top: 8px;
+}
+
+.result-badge-robot {
+  background: rgba(33, 150, 243, 0.1);
+  color: #1565c0;
+  border: 1px solid rgba(33, 150, 243, 0.3);
+}
+
+.result-badge-mai {
+  background: rgba(236, 64, 122, 0.1);
+  color: #c2185b;
+  border: 1px solid rgba(236, 64, 122, 0.3);
+}
+
+.result-badge-viet {
+  background: rgba(255, 152, 0, 0.1);
+  color: #e65100;
+  border: 1px solid rgba(255, 152, 0, 0.3);
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
